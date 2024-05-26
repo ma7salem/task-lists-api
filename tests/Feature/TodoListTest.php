@@ -15,6 +15,7 @@ class TodoListTest extends TestCase
     public function setUp(): void 
     {
         parent::setup(); 
+        $this->actAsUser();
         $this->list = TodoList::factory()->create();
     }
 

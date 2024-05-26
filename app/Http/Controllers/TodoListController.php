@@ -17,9 +17,9 @@ class TodoListController extends Controller
         return response()->json($lists);   
     }
 
-    public function show(TodoList $todo_list)
+    public function show(TodoList $list)
     {
-        return response()->json($todo_list);
+        return response()->json($list);
     }
 
     public function store(TodolistRequest $request, TodoListCreateAction $createAction)
@@ -27,14 +27,14 @@ class TodoListController extends Controller
         return response()->json($createAction->run($request->validated()), Response::HTTP_CREATED);
     }
 
-    public function update(TodoList $todo_list, TodolistRequest $request, TodoListUpdateAction $updateAction)
+    public function update(TodoList $list, TodolistRequest $request, TodoListUpdateAction $updateAction)
     {
-        return response()->json($updateAction->run(['inputs' => $request->validated(), 'todo' => $todo_list]), Response::HTTP_OK);
+        return response()->json($updateAction->run(['inputs' => $request->validated(), 'todo' => $list]), Response::HTTP_OK);
     }
 
-    public function destroy(TodoList $todo_list, TodoListDeleteAction $deleteAction)
+    public function destroy(TodoList $list, TodoListDeleteAction $deleteAction)
     {
-        $deleteAction->run(['todo' => $todo_list]);
+        $deleteAction->run(['todo' => $list]);
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }
