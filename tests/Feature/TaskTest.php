@@ -20,7 +20,7 @@ class TaskTest extends TestCase
         
     }
 
-    public function test_get_all_tasks(): void
+    public function test_geting_all_tasks(): void
     {
         $response = $this->getJson(route('tasks.index', $this->task->todo_list_id))
                     ->assertOk()
@@ -29,7 +29,7 @@ class TaskTest extends TestCase
         $this->assertEquals(1, count($response));
     }
 
-    public function test_get_one_task(): void 
+    public function test_geting_one_task(): void 
     {
         $response = $this->getJson(route('tasks.show', [$this->task->id]))
                     ->assertOk()

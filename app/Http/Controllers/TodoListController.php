@@ -13,8 +13,7 @@ class TodoListController extends Controller
 {
     public function index()
     {
-        $lists = TodoList::all();
-        return response()->json($lists);   
+        return response()->json(auth()->user()->todoLists);   
     }
 
     public function show(TodoList $list)
@@ -34,7 +33,6 @@ class TodoListController extends Controller
 
     public function destroy(TodoList $list, TodoListDeleteAction $deleteAction)
     {
-        $deleteAction->run(['todo' => $list]);
-        return response()->json([], Response::HTTP_NO_CONTENT);
+        return response()->json($deleteAction->run(['todo' => $list]), Response::HTTP_NO_CONTENT);
     }
 }

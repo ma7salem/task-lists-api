@@ -15,8 +15,8 @@ class TodoListTest extends TestCase
     public function setUp(): void 
     {
         parent::setup(); 
-        $this->actAsUser();
-        $this->list = TodoList::factory()->create();
+        $user       = $this->actAsUser();
+        $this->list = TodoList::factory()->create(['user_id' => $user->id]);
     }
 
     /**
@@ -24,6 +24,7 @@ class TodoListTest extends TestCase
      */
     public function test_show_all_todo_lists(): void
     {
+        TodoList::factory()->create();
         $response = $this->getJson(route('todo-lists.index'));
         $this->assertEquals(1, count($response->json()));
         $this->assertEquals($this->list->name, $response->json()[0]['name']);

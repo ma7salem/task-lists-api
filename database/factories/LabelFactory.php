@@ -6,9 +6,9 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TodoList>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Label>
  */
-class TodoListFactory extends Factory
+class LabelFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,7 +18,8 @@ class TodoListFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'  => $this->faker->sentence(20),
+            'title' => $this->faker->word(5, true),
+            'color' => $this->faker->colorName(),
             'user_id' => function(){
                 return User::factory()->create()->id;
             }

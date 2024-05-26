@@ -16,8 +16,7 @@ class TaskController extends Controller
     
     public function index(TodoList $list) 
     {
-        $tasks = $list->tasks;
-        return response()->json($tasks);
+        return response()->json($list->tasks);
     }
 
     public function show(Task $task)
@@ -37,7 +36,6 @@ class TaskController extends Controller
 
     public function destroy(Task $task, TaskDeleteAction $deleteAction)
     {
-        $deleteAction->run(['task' => $task]);
-        return response()->json([], Response::HTTP_NO_CONTENT);
+        return response()->json($deleteAction->run(['task' => $task]), Response::HTTP_NO_CONTENT);
     }
 }
