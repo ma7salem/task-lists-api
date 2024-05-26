@@ -22,7 +22,9 @@ class TaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'  => 'required'
+            'name'      => 'required',
+            'details'   => 'nullable',
+            'label_id'  => 'nullable|exists:labels,id'
         ];
     }
 }

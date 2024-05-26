@@ -12,11 +12,18 @@ class Task extends Model
 
     protected $fillable = [
         'name',
-        'todo_list_id'
+        'details',
+        'todo_list_id',
+        'label_id'
     ];
 
     public function todoList(): BelongsTo
     {
         return $this->belongsTo(TodoList::class);    
+    }
+
+    public function label(): BelongsTo
+    {
+        return $this->belongsTo(Label::class);    
     }
 }
