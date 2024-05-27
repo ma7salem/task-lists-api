@@ -25,9 +25,9 @@ class TodoListTest extends TestCase
     public function test_show_all_todo_lists(): void
     {
         TodoList::factory()->create();
-        $response = $this->getJson(route('todo-lists.index'));
-        $this->assertEquals(1, count($response->json()));
-        $this->assertEquals($this->list->name, $response->json()[0]['name']);
+        $response = $this->getJson(route('todo-lists.index'))->json();
+        $this->assertEquals(1, count($response));
+        $this->assertEquals($this->list->name, $response[0]['name']);
     }
 
     public function test_show_one_todo_list(): void 

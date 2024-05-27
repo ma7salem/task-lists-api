@@ -25,7 +25,6 @@ class TaskTest extends TestCase
         $response = $this->getJson(route('tasks.index', $this->task->todo_list_id))
                     ->assertOk()
                     ->json();
-
         $this->assertEquals(1, count($response));
     }
 

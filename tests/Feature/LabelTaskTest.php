@@ -33,7 +33,7 @@ class LabelTaskTest extends TestCase
         $response = $this->postJson(route('tasks.store', $this->task->todo_list_id), $inputs)
                     ->assertCreated()
                     ->json();
-        $this->assertEquals($inputs['label_id'], $response['label_id']);    
+        $this->assertEquals($inputs['label_id'], $response['label']['id']);    
         $this->assertDatabaseHas('tasks', $inputs);
     }
 
