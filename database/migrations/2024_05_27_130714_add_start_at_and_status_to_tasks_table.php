@@ -12,13 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->text('details')->nullable()->after('name');
-            $table->foreignId('label_id')
-            ->nullable()
-            ->constrained('labels')
-            ->onUpdate('cascade')
-            ->onDelete('cascade')
-            ->after('todo_list_id');
+            $table->timestamp('start_at')->nullable()->after('details');
+            $table->enum('status', ['pending', 'started', 'completed', 'cancelled'])->default('pending')->after('start_at');
         });
     }
 
@@ -28,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->dropColumn(['details', 'label_id']);
+            $table->dropColumn(['start_at', 'status']);
         });
     }
 };

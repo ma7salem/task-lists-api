@@ -3,8 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\Task;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class TaskTest extends TestCase
@@ -36,7 +38,7 @@ class TaskTest extends TestCase
         $this->assertEquals($this->task->id, $response['id']);    
     }
 
-    public function test_store_one_task(): void 
+    public function test_store_one_not_schedule_task(): void 
     {
         $name = 'new task added';
         $response = $this->postJson(route('tasks.store', $this->task->todo_list_id), ['name' => $name])
@@ -55,10 +57,40 @@ class TaskTest extends TestCase
         ->assertJsonValidationErrors(['name']);   
     }
 
+    public function test_store_onet_schedule_task(): void 
+    {
+        $name  = 'new task added';
+        $start = Carbon::now()->addDays(1)->format('Y-m-d H:i:s'); 
+        $response = $this->postJson(route('tasks.store', $this->task->todo_list_id), ['name' => $name, 'start_at' => $start])
+                    ->assertCreated()
+                    ->json();
+        $this->assertEquals($start, $response['schedule']);    
+        $this->assertDatabaseHas('tasks', ['name' => $name, 'start_at' => $start, 'todo_list_id' => $this->task->todo_list_id]);
+    }
+
+    public function test_while_storing_one_schedule_task_start_at_field_is_valid_format(): void 
+    {
+        $this->withExceptionHandling();
+        $inputs = ['start_at' => Carbon::now()->addDays(1)->format('Y-m-d'), 'name' => 'test'];
+        $this->postJson(route('tasks.store', $this->task->todo_list_id), $inputs)
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['start_at']);   
+    }
+
+    public function test_while_storing_one_schedule_task_start_at_field_is_valid_date_and_after_today(): void 
+    {
+        $this->withExceptionHandling();
+        $inputs = ['start_at' => Carbon::now()->subDays(1)->format('Y-m-d  H:i:s'), 'name' => 'test'];
+        $this->postJson(route('tasks.store', $this->task->todo_list_id), $inputs)
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['start_at']);   
+    }
+
     public function test_update_one_task(): void 
     {
+        Event::fake();
         $name = 'task updated';
-        $this->patchJson(route('tasks.update', [$this->task->id]), ['name' => $name])
+        $this->patchJson(route('tasks.update', [$this->task->id]), ['name' => $name, 'status' => 'completed'])
         ->assertOk();
         $this->assertDatabaseHas('tasks', ['name' => $name, 'todo_list_id' => $this->task->todo_list_id]);
     }

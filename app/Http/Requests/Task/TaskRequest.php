@@ -24,7 +24,9 @@ class TaskRequest extends FormRequest
         return [
             'name'      => 'required',
             'details'   => 'nullable',
-            'label_id'  => 'nullable|exists:labels,id'
+            'start_at'  => 'nullable|date_format:Y-m-d H:i:s|after:today',
+            'label_id'  => 'nullable|exists:labels,id',
+            'status'    => 'nullable|in:pending,started,completed,cancelled'
         ];
     }
 }

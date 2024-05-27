@@ -13,6 +13,8 @@ class Task extends Model
     protected $fillable = [
         'name',
         'details',
+        'start_at',
+        'status',
         'todo_list_id',
         'label_id'
     ];
@@ -25,5 +27,10 @@ class Task extends Model
     public function label(): BelongsTo
     {
         return $this->belongsTo(Label::class);    
+    }
+
+    public function getIsScheduleAttribute(): bool
+    {
+        return $this->start_at ? true : false;    
     }
 }

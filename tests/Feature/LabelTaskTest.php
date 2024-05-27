@@ -6,6 +6,7 @@ use App\Models\Label;
 use App\Models\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class LabelTaskTest extends TestCase
@@ -52,6 +53,8 @@ class LabelTaskTest extends TestCase
 
     public function test_update_one_task_with_label_id_and_details(): void 
     {
+        Event::fake();
+
         $inputs   = [
             'name'     => 'update task with label and details',
             'label_id' => $this->label->id,

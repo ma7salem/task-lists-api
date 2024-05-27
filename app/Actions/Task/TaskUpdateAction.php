@@ -2,6 +2,7 @@
 Namespace App\Actions\Task;
 
 use App\Actions\Action;
+use App\Events\TaskStatusHasBeenUpdateEvent;
 
 class TaskUpdateAction extends Action
 {
@@ -9,7 +10,9 @@ class TaskUpdateAction extends Action
     {
         $inputs     = $data['inputs'];
         $task       = $data['task'];
+        $status     = $task->status;
         $task->update($inputs);
-        return $task->fresh();
+        TaskStatusHasBeenUpdateEvent::dispatchIf($status != $task->status, $task);
+        return $task;
     }
 }
